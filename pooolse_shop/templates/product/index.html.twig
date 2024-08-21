@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container-fluid productsPage">
+    <div class="d-flex">
+        <div class="contentWidth row">
+            <div class="col-12 col-lg-4">
+                <div class="d-flex align-items-center mb-4 mt-3">
+                    <div class="dropdown me-3">
+                        <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{{ asset('setting.svg') }}" alt="Settings icon" height="24" width="24">
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <button class="dropdown-item d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-alphabet-uppercase fs-5 me-2"></i>
+                                    Név [A-Z]
+                                </button>
+                            </li>
+                            <li>
+                                <button class="dropdown-item d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-coin fs-6 me-2"></i>
+                                    Ár Növekvő
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div id="filterTitle" class="filterTitle me-3">Szűrők</div>
+                    <div class="px-3 py-2" style="font-size: 14px; background: rgb(242, 242, 242); border-radius: 35px;">
+                        <div class="filterCount">{{ products|length }} találat</div>
+                    </div>
+                </div>
+            </div>
+            <div class="filterTitle col-12 col-lg-8 mt-3">
+                <div>Minden Termék</div>
+                <div id="productsList" class="row mt-3 row-cols-1 row-cols-sm-2 row-cols-xl-3 g-4">
+                    {% for product in products %}
+                        <div class="col">
+                            <div class="card h-100">
+                                <div class="img-container">
+                                    <img src={{product.pic_route}} class="card-img-top" alt="product">
+                                </div>    
+                                <div class="card-body">
+                                    <p class="cardTitle">{{product.name}}</p>
+                                    <div class="d-flex justify-content-center">
+                                        <span class="cardBrand">{{product.brand}}</span>
+                                    </div>
+                                    {% if product.discount_price is same as(product.price) %}
+                                        <div class="cardPricesBox d-flex justify-content-center mt-3">
+                                            <span class="cardPrice">{{ product.price|number_format(0, ',', ' ') }} Ft</span>
+                                        </div>
+                                    {% else %}
+                                        <div class="cardPricesBox d-flex flex-column justify-content-center align-items-center mt-3">
+                                            <div class="cardOriginalPrice"><s>{{ product.price|number_format(0, ',', ' ') }} Ft</s></div>
+                                            <div class="cardPrice" style="color:red;">{{ product.discount_price|number_format(0, ',', ' ') }} Ft</div>
+                                        </div>
+                                    {% endif %}
+                                <div class="row align-items-center w-100 quantityContainer">
+                                        <div class="d-flex align-items-center justify-content-center quantityWrapper">
+                                            <button type="button" class="nrOfProductBtn moveTransitionMinMinus minusBtn">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="#4D4F53">
+                                                    <path fill="none" d="M0 0h24v24H0z"></path>
+                                                    <path d="M5 11h14v2H5z"></path>
+                                                </svg>
+                                            </button>
+                                            <div class="d-flex flex-column align-items-center mx-3">
+                                                <span class="cardQuantityText">Darabszám:</span>
+                                                <div class="quantityToBuy buyCounter" data-id="{{product.id}}" data-price="{{product.discount_price}}" data-quantity="1">1 db</div>
+                                            </div>
+                                            <button type="button" class="nrOfProductBtn moveTransition plusBtn">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="#4D4F53">
+                                                    <path fill="none" d="M0 0h24v24H0z"></path>
+                                                    <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div class="d-flex justify-content-center mt-3 aggregatedProductPrice" data-aggregated-price="{{product.discount_price}}">
+                                            {{ product.discount_price|number_format(0, ',', ' ') }} Ft 
+                                        </div>
+                                        <div class="d-flex justify-content-center mt-3">
+                                            <button type="button" class="btn btn-danger productButton">
+                                                <div class="d-flex align-items-end justify-content-center">
+                                                    <div class="me-3">Kosárba</div>
+                                                    <img src="{{ asset('sack.svg') }}" alt="Logo" height="25" width="25">
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="cardBadge">
+                                    <span>{{product.id}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}    
+                </div>    
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

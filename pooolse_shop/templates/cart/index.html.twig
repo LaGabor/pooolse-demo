@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+<script>
+    const shoppingCartDataUrl = "{{ path('shoppingCartData') }}";
+    const homepageUrl = "{{ path('homepage') }}";
+</script>
+<script src="{{ asset('cart.js') }}"></script>
+
+<div class="cartBox">
+        <div class="d-flex row mt-5 ms-3">
+        <div class="col-12 col-lg-8 filterTitle">
+                <div class="d-flex justify-content-center"> 
+                    Kosár
+                </div>
+                <div class="d-flex row justify-content-center mt-3"> 
+                    <div id="cartContainer"></div>
+                </div>
+        </div>
+        <div class="col-12 col-lg-4 d-flex flex-column align-items-center justify-content-center mt-3">
+                <div class="text-center mb-3">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <span id="originalPrice" class="text-muted me-3"><s>{{ 0|number_format(0, ',', ' ') }} Ft</s></span>
+                        <span id="discountedPrice" class="text-danger">{{ 0|number_format(0, ',', ' ') }} Ft</span>
+                    </div>
+                </div>
+                <button id="saveCartBtn" type="button" class="btn btn-danger d-flex align-items-center">
+                    Kosár mentése
+                    <img src="{{ asset('sack.svg') }}" alt="Logo" height="25" width="25" class="ms-2">
+                </button>
+            </div>
+        </div>
+      
+</div>
+
+{% endblock %}

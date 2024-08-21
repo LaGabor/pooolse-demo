@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Oldal nem található{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="display-4">404 - Oldal nem található</h1>
+        <p class="lead">Sajnos az oldal, amit keresel, nem található.</p>
+        <a href="{{ path('homepage') }}" class="btn btn-primary">Vissza a főoldalra</a>
+    </div>
+{% endblock %}
