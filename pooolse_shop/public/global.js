@@ -58,22 +58,25 @@ $(document).ready(async function() {
     $('.minusBtn').click(function(event) {
         let [$quantityElement, originalQuantity, currentQuantity] = changeProductCount(event, minus);
         let productId = $(this).data('id');
-        if (temporaryShoppingCart[productId].quantity > 1) {
+        
+        if ($(this).hasClass('cart') && temporaryShoppingCart[productId].quantity > 1) {
             temporaryShoppingCart[productId].quantity -= 1;
+            sessionStorage.setItem('temporaryShoppingCart', JSON.stringify(temporaryShoppingCart));
         }
-        sessionStorage.setItem('temporaryShoppingCart', JSON.stringify(temporaryShoppingCart));
-
+        
         updatePrice($quantityElement, event, minus, originalQuantity, currentQuantity);
     });
 
     $('.plusBtn').click(function(event) {
         let [$quantityElement, originalQuantity, currentQuantity] = changeProductCount(event, plus);
         let productId = $(this).data('id');
-        console.log(productId);
         
-        temporaryShoppingCart[productId].quantity += 1;
-        sessionStorage.setItem('temporaryShoppingCart', JSON.stringify(temporaryShoppingCart));
+        if($(this).hasClass('cart')){
+            temporaryShoppingCart[productId].quantity += 1;
+             sessionStorage.setItem('temporaryShoppingCart', JSON.stringify(temporaryShoppingCart));
 
+        }
+        
         updatePrice($quantityElement, event, plus, originalQuantity, currentQuantity );
     });
 
@@ -82,7 +85,8 @@ $(document).ready(async function() {
         let $quantityElement = $button.siblings('.mx-3').find('.buyCounter');
         let currentQuantity = parseInt($quantityElement.attr('data-quantity'));
         let originalQuantity = currentQuantity;
-
+        console.log(currentQuantity, originalQuantity);
+        
         if (currentQuantity > 1 || eventType > 0) {
             currentQuantity += eventType;
             $quantityElement.attr('data-quantity', currentQuantity);
@@ -104,7 +108,7 @@ $(document).ready(async function() {
         let totalPrice = pricePerItem * currentQuantity;
 
         if ($quantityElement.attr('data-originalprice') !== undefined) {
-            
+            console.log('Kacsa');
             let originalPricePerItem = parseInt($quantityElement.attr('data-originalprice'));
             let $cartCard =  $(event.currentTarget).closest('.cartCard');
             let $cardPrice = $cartCard.find('.cardPrice');
@@ -214,10 +218,13 @@ $(document).ready(async function() {
 
     $('.btn-danger').on('click', async function() {
         let productId = $(this).closest('.card').find('.quantityToBuy').data('id');
-        let quantity = parseInt($(this).closest('.card').find('.quantityToBuy').data('quantity'));
+        let quantityText = $(this).closest('.card').find('.buyCounter').text(); 
+        let quantity = parseInt(quantityText.replace(' db', ''));
         let shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart')) || {};
-
+        
+        console.log(quantity)
         if ($(this).text().trim() === 'Kosár mentése') {
+           
             sessionStorage.setItem('shoppingCart', JSON.stringify(temporaryShoppingCart));
             updateCartProductCount();
             
@@ -232,7 +239,7 @@ $(document).ready(async function() {
                 $('#priceSummary').text(`${formattedDiscountPrice} HUF`);
             }
         }else{
-
+            
             if (shoppingCart[productId]) {
                 shoppingCart[productId].quantity += quantity;
             } else {
